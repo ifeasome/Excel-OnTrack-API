@@ -1,61 +1,94 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Title from './comps/title';
-import * as XLSX from 'xlsx';
+import './App.css';
 
-function App() {
+// import * as XLSX from 'xlsx';
 
-  const [items, setItems] = useState([]);
+const Input = (props) => ( 
+  <input type="file" name="file-input" multiple {...props} />
 
-  const readExcel = (file) => {
+)
+const App = () => {
+  const onSubmit = (e) => {
+    e.preventDefault()
+  }
 
-    const promise = new Promise((resolve, reject) => {
-
-      const fileReader = new FileReader();
-
-      fileReader.readAsArrayBuffer(file);
-
-      fileReader.onload = (e) => {
-
-        const bufferArray = e.target.result;
-
-        const workBook = XLSX.read(bufferArray, { type: "buffer" });
-
-        const workSheetName = workBook.SheetNames[0];
-
-        const workSheet = workBook.Sheets[workSheetName];
-
-        const data = XLSX.utils.sheet_to_json(workSheet);
-
-        resolve(data);
-      };
-
-      fileReader.onerror = (error) => {
-
-        reject(error);
-      };
-    });
-
-    promise.then((d) => {
-
-     setItems(d)
-
-    });
-  };
-
-
+  const onChange = (e) => {
+    console.log(e.target.files)
+  }
 
   return (
-    <div className="App">
+    <div className="container">
       <Title/>
-      <input type="file" 
-      onChange={(e)=> 
-      {const file = e.target.files[0]; 
-      readExcel(file);
-      }} />
+      <form className="form" onSubmit={onSubmit}>
+        <div>
+          <Input onChange={onChange} /> 
+          <button type="submit">Submit</button>
+          </div>
+      </form>
     </div>
-  );
+  )
+
+
 }
 
 export default App;
 
 
+// previous code base
+// const [items, setItems] = useState([]);
+
+// const readExcel = (file) => {
+
+//   const promise = new Promise((resolve, reject) => {
+
+//     const fileReader = new FileReader();
+
+//     fileReader.readAsArrayBuffer(file);
+
+//     fileReader.onload = (e) => {
+
+//       const bufferArray = e.target.result;
+
+//       const workBook = XLSX.read(bufferArray, { type: "buffer" });
+
+//       const workSheetName = workBook.SheetNames[0];
+
+//       const workSheet = workBook.Sheets[workSheetName];
+
+//       const data = XLSX.utils.sheet_to_json(workSheet);
+
+//       resolve(data);
+//     };
+
+//     fileReader.onerror = (error) => {
+
+//       reject(error);
+//     };
+//   });
+
+//   promise.then((d) => {
+
+//    setItems(d)
+
+//   });
+// };
+
+
+
+// return (
+//   <form> 
+//   <div className="App">
+//     <Title/>
+//     <label> 
+//     <input type="file" 
+//     onChange={(e)=> 
+//     {const file = e.target.files[0]; 
+//     readExcel(file);
+//     }} />
+//      <span>+</span>
+//     </label>
+//   </div>
+//   </form>
+// );
+// }
